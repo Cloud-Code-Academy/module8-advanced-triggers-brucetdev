@@ -70,16 +70,18 @@ public with sharing class AccountHelper {
             }
         }
     }  
+
+
     public static void defaultContact(List<Account> accList){
         List<Contact> contacts = new List<Contact>();   
     
         for(Account acc : accList){
-               System.debug('The default Contact list trigger for loop has started here');
+               //System.debug('The default Contact list trigger for loop has started here');
                Contact con = new Contact();
                con.LastName = 'DefaultContact';
                con.Email = 'default@email.com';
                con.AccountId = acc.Id;
-               System.debug('This is the List of contacts to be inserted by the default Contact trigger::: ' + con);
+               //System.debug('This is the List of contacts to be inserted by the default Contact trigger::: ' + con);
                contacts.add(con);
            }
            insert contacts; 

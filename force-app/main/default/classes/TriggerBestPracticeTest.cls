@@ -385,6 +385,7 @@ public with sharing class TriggerBestPracticeTest {
         List<Opportunity> updatedOpps = [SELECT Id, Description FROM Opportunity WHERE Id IN :opps];
         System.assertEquals(numberOfOpps, updatedOpps.size(), 'Number of Opportunities updated is incorrect.');
         for (Opportunity opp : updatedOpps) {
+        System.debug('The value of opp.Description is: ' + opp.Description); // Bruce added this line to help with debugging    
             System.assert(opp.Description.contains('Stage Change:Qualification'), 'Opportunity Description is incorrect: ' + opp.Description);
         }
     }
