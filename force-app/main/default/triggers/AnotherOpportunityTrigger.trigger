@@ -10,7 +10,7 @@ IMPORTANT:
 ISSUES:
 Avoid nested for loop - 1 instance
 Avoid DML inside for loop - 1 instance
-Bulkify Your Code - 1 instance
+Bulkify Your Code - 1 instance - done - OpportunityTrigger_setType
 Avoid SOQL Query inside for loop - 2 instances
 Stop recursion - 1 instance
 
