@@ -1,27 +1,22 @@
 public with sharing class OpportunityTriggerHandler {
 
     public static void amountValidation(List<Opportunity> opps){
-if (Trigger.isUpdate && Trigger.isBefore){
     for(Opportunity opp : opps){
         if(opp.Amount < 5000){
         opp.addError('Opportunity amount must be greater than 5000');
         }
-    }
-    }
+    }  
     }
 
     public static void deleteCloseWonOpportunity(List<Opportunity> opps){
            
         Map<Id, Account> accounts = new Map<Id, Account>([SELECT Id, Industry FROM Account WHERE Id IN (SELECT AccountId FROM Opportunity WHERE Id IN :Trigger.old)]);
         for(Opportunity opp : opps){
-            if(opp.StageName == 'Closed Won'){
-                if(accounts.get(opp.AccountId).Industry == 'Banking'){
-                    opp.addError('Cannot delete closed opportunity');
-                    }
+            if(opp.StageName == 'Closed Won' && opp.Account.Industry == 'Banking'){             
+                opp.addError('Cannot delete closed opportunity');                   
                 }
             }
-           
-        }
+              }
 
         public static void setPrimaryContact(Map<ID, Opportunity> Map1){
 
@@ -78,28 +73,19 @@ public static void validateCloseOpportunity(List<Opportunity> opps){
         
 
 public static void updateDescriptionFromStage(List<Opportunity> opps){
-            //if (Trigger.isUpdate && trigger.isBefore){ // this trigger logic doesn't need to be here so it should be removed. It should be in OpportunityTrigger only.
             System.debug('the updateDescriptionFromStage method has started');
                         // Append Stage changes in Opportunity Description
                         List <Opportunity> oppsToUpdate = new List<Opportunity>();
                         for (Opportunity opp : opps){
-                            //for (Opportunity oldOpp : oppsToUpdate){ // this for loop was causing confusion... so commented it out. This was looping through an empty loop.
                             System.debug('the for loop in the updateDescriptionFromStage method has started');
                                 if (opp.StageName != null){  
-                                    opp.Description += '\n Stage Change:' + opp.StageName + ':' + DateTime.now().format();  // this line updates the local variable - it is before update
-                                    //oppsToUpdate.add(opp.Description); // experimenting by adding this line to support the update DML statement at the end
+                                    opp.Description += '\n Stage Change:' + opp.StageName + ':' + DateTime.now().format();                                    
                                 System.debug('The opp.Description contains: ' + opp.Description);    
-                                }
-                            //}                
+                                }                                         
                         }
-                        System.debug('the opps List contains: ' + opps);
-                       // update opps; // DML statement line is not needed because this is a BEFORE UPDATE context. We don't want to do a DML statement here because it will
-                       // cause an infinite loop. The conclusion: When using any BEFORE situation, no DML statement is needed at the END. DML statements are needed for AFTER UPDATE trigger.
-                       
+                        System.debug('the opps List contains: ' + opps); 
             }
-        //}
-
-
+        
         //assignPrimaryContact:
         //- Assigns a primary contact with the title of 'VP Sales' to undeleted Opportunities.
         //- Only updates the Opportunities that don't already have a primary contact.
